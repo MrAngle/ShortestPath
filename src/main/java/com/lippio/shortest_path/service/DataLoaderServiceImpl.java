@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class DataLoaderServiceImpl implements DataLoaderService  {
+public class DataLoaderServiceImpl implements DataLoaderService {
 
 
     @Override
