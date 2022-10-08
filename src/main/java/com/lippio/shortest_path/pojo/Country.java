@@ -5,11 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.lippio.shortest_path.dijkstra.MyNode;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -65,11 +67,19 @@ public class Country {
 
     // DJIKSTRA
 
+//    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     private Integer distance = Integer.MAX_VALUE;
+    private ArrayList<String> path = new ArrayList();
     private List<Country> shortestPath = new LinkedList<>();
 
-    public void setDistance(int i) {
+//    public void setDistance(int i) {
+//        distance = i;
+//    }
+
+    public void setDistance(int i, Country country) {
         distance = i;
+        path.add(country.getCountryCode());
     }
 
     public List<Country> getShortestPath() {

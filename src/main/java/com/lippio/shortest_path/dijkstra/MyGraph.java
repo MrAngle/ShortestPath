@@ -20,7 +20,7 @@ public class MyGraph {
 
 
     public static MyGraph calculateShortestPathFromSource(MyGraph graph, Country source) {
-        source.setDistance(0);
+        source.setDistance(0, source);
 
         Set<Country> settledNodes = new HashSet<>();
         Set<Country> unsettledNodes = new HashSet<>();
@@ -61,7 +61,7 @@ public class MyGraph {
                                                  Integer edgeWeigh, Country sourceNode) {
         Integer sourceDistance = sourceNode.getDistance();
         if (sourceDistance + edgeWeigh < evaluationNode.getDistance()) {
-            evaluationNode.setDistance(sourceDistance + edgeWeigh);
+            evaluationNode.setDistance(sourceDistance + edgeWeigh, evaluationNode);
             LinkedList<Country> shortestPath = new LinkedList<>(sourceNode.getShortestPath());
             shortestPath.add(sourceNode);
             evaluationNode.setShortestPath(shortestPath);
