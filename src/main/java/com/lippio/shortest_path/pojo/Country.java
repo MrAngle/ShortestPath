@@ -69,7 +69,7 @@ public class Country {
 
 //    @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    private Integer distance = Integer.MAX_VALUE;
+    private float distance = Float.MAX_VALUE;
     private ArrayList<String> path = new ArrayList();
     private List<Country> shortestPath = new LinkedList<>();
 
@@ -77,8 +77,8 @@ public class Country {
 //        distance = i;
 //    }
 
-    public void setDistance(int i, Country country) {
-        distance = i;
+    public void setDistance(float distance, Country country) {
+        this.distance = distance;
         path.add(country.getCountryCode());
     }
 

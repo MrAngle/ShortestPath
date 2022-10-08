@@ -1,6 +1,7 @@
 package com.lippio.shortest_path.dijkstra;
 
 import com.lippio.shortest_path.pojo.Country;
+import com.lippio.shortest_path.pojo.NodeRelation;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -20,7 +21,8 @@ public class MyGraph {
 
 
     public static MyGraph calculateShortestPathFromSource(MyGraph graph, Country source) {
-        source.setDistance(0, source);
+        source.setDistance(0f, source);
+//        source.setDistance(source);
 
         Set<Country> settledNodes = new HashSet<>();
         Set<Country> unsettledNodes = new HashSet<>();
@@ -33,7 +35,8 @@ public class MyGraph {
             for (Map.Entry<String, Country> adjacencyPair:
                     currentNode.getBorders().entrySet()) {
                 Country adjacentNode = adjacencyPair.getValue();
-                Integer edgeWeight = 1;
+                float edgeWeight = NodeRelation.calculateVector(currentNode.getCoordinates(),
+                        adjacentNode.getCoordinates());
                 if (!settledNodes.contains(adjacentNode)) {
                     calculateMinimumDistance(adjacentNode, edgeWeight, currentNode);
                     unsettledNodes.add(adjacentNode);
@@ -46,9 +49,9 @@ public class MyGraph {
 
     private static Country getLowestDistanceNode(Set <Country> unsettledNodes) {
         Country lowestDistanceNode = null;
-        int lowestDistance = Integer.MAX_VALUE;
+        float lowestDistance = Integer.MAX_VALUE;
         for (Country node: unsettledNodes) {
-            int nodeDistance = node.getDistance();
+            float nodeDistance = node.getDistance();
             if (nodeDistance < lowestDistance) {
                 lowestDistance = nodeDistance;
                 lowestDistanceNode = node;
@@ -58,10 +61,14 @@ public class MyGraph {
     }
 
     private static void calculateMinimumDistance(Country evaluationNode,
-                                                 Integer edgeWeigh, Country sourceNode) {
-        Integer sourceDistance = sourceNode.getDistance();
+                                                 float edgeWeigh, Country sourceNode) {
+        float sourceDistance = sourceNode.getDistance();
         if (sourceDistance + edgeWeigh < evaluationNode.getDistance()) {
-            evaluationNode.setDistance(sourceDistance + edgeWeigh, evaluationNode);
+
+            float dist = sourceDistance + NodeRelation.calculateVector(evaluationNode.getCoordinates(),
+                    sourceNode.getCoordinates());
+
+            evaluationNode.setDistance(dist, evaluationNode);
             LinkedList<Country> shortestPath = new LinkedList<>(sourceNode.getShortestPath());
             shortestPath.add(sourceNode);
             evaluationNode.setShortestPath(shortestPath);

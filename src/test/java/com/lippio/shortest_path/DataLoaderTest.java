@@ -118,6 +118,12 @@ public class DataLoaderTest {
 //        graph.addNode(ITA);
         graph = MyGraph.calculateShortestPathFromSource(graph, NAM);
 
+        Country KOR =  countries.stream().filter(x -> x.getCountryCode().equals("VNM")).findFirst().get();
+        for (Country country: KOR.getShortestPath()) {
+            System.out.println(country.getName() + " - " + country.getDistance() + " - " + country.getCountryCode() + " - " + country.getCoordinates());
+        }
+
+
         System.out.println(graph);
     }
 
