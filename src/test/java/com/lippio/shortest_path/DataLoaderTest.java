@@ -1,9 +1,6 @@
 package com.lippio.shortest_path;
 
-import com.lippio.shortest_path.dijkstra.Graph;
 import com.lippio.shortest_path.dijkstra.MyGraph;
-import com.lippio.shortest_path.dijkstra.MyNode;
-import com.lippio.shortest_path.dijkstra.Node;
 import com.lippio.shortest_path.pojo.Country;
 import com.lippio.shortest_path.service.DataLoaderService;
 import org.junit.jupiter.api.Test;
@@ -11,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @SpringBootTest(classes={com.lippio.shortest_path.ShortestPathApplication.class})
@@ -28,82 +25,126 @@ public class DataLoaderTest {
     @Autowired
     DataLoaderService dataLoaderService;
 
-    @Test
-    void restTempTest() {
-        Country[] response = restTemplate.getForObject(
-                "https://raw.githubusercontent.com/mledoze/countries/master/countries.json", Country[].class);
-        System.out.println(response);
-    }
+//    @Test
+//    void restTempTest() {
+//        Country[] response = restTemplate.getForObject(
+//                "https://raw.githubusercontent.com/mledoze/countries/master/countries.json", Country[].class);
+//        System.out.println(response);
+//    }
 
-    @Test
-    void restTempTest2() {
-        Set<Country> countries = dataLoaderService.loadData();
-
-        System.out.println(countries);
-    }
 
 
     @Test
-    void dijkstraTest() {
-        Set<Country> countries = dataLoaderService.loadData();
-        System.out.println(countries);
-
-        Node nodeA = new Node("A");
-        Node nodeB = new Node("B");
-        Node nodeC = new Node("C");
-        Node nodeD = new Node("D");
-        Node nodeE = new Node("E");
-        Node nodeF = new Node("F");
-
-        nodeA.addDestination(nodeB, 10);
-        nodeA.addDestination(nodeC, 15);
-
-        nodeB.addDestination(nodeD, 12);
-        nodeB.addDestination(nodeF, 15);
-
-        nodeC.addDestination(nodeE, 10);
-
-        nodeD.addDestination(nodeE, 2);
-        nodeD.addDestination(nodeF, 1);
-
-        nodeF.addDestination(nodeE, 5);
-
-        Graph graph = new Graph();
-
-        graph.addNode(nodeA);
-        graph.addNode(nodeB);
-        graph.addNode(nodeC);
-        graph.addNode(nodeD);
-        graph.addNode(nodeE);
-        graph.addNode(nodeF);
-
-        graph = Graph.calculateShortestPathFromSource(graph, nodeA);
-
-        System.out.println(graph);
-    }
-
-
-    @Test
-    void myDijkstraTest() {
+    void myDijkstraTest_NAM_TO_VNM() {
         Set<Country> countries = dataLoaderService.loadData();
 
         MyGraph graph = new MyGraph();
-        Country pol = countries.stream().filter(x -> x.getCountryCode().equalsIgnoreCase("POL")).findFirst().get();
-
         Country NAM = countries.stream().filter(x -> x.getCountryCode().equals("NAM")).findFirst().get();
-        for (Country country: countries) {
-            graph.addNode(country);
+        Country VNM = countries.stream().filter(x -> x.getCountryCode().equals("VNM")).findFirst().get();
+
+
+        VNM = MyGraph.calculateShortestPathFromSource(graph, NAM, VNM);
+
+
+        for (Country country: VNM.getShortestPath()) {
+            System.out.println(country.getName() + " - " + country.getDistance() + " - " + country.getCountryCode() + " - " + Arrays.toString(country.getCoordinates()));
         }
+        String[] expectedPath = { "NAM", "AGO", "COD", "SSD", "SDN", "EGY", "ISR", "JOR", "IRQ", "IRN", "PAK", "IND",
+                "MMR", "LAO", "VNM" };
+        System.out.println(MyGraph.nodesOperationsNumber);
+        assertArrayEquals(expectedPath, VNM.getShortestPathAsArray());
+    }
 
-        graph = MyGraph.calculateShortestPathFromSource(graph, NAM);
 
-        Country KOR =  countries.stream().filter(x -> x.getCountryCode().equals("VNM")).findFirst().get();
-        for (Country country: KOR.getShortestPath()) {
+
+    @Test
+    void myDijkstraTest_CZE_TO_ITA() {
+        Set<Country> countries = dataLoaderService.loadData();
+
+        MyGraph graph = new MyGraph();
+        Country CZE = countries.stream().filter(x -> x.getCountryCode().equals("CZE")).findFirst().get();
+        Country ITA = countries.stream().filter(x -> x.getCountryCode().equals("ITA")).findFirst().get();
+
+        ITA = MyGraph.calculateShortestPathFromSource(graph, CZE, ITA);
+
+
+        for (Country country: ITA.getShortestPath()) {
             System.out.println(country.getName() + " - " + country.getDistance() + " - " + country.getCountryCode() + " - " + country.getCoordinates());
         }
+        String[] expectedPath = { "CZE" , "AUT" , "ITA" };
+        System.out.println(MyGraph.nodesOperationsNumber);
+        assertArrayEquals(expectedPath, ITA.getShortestPathAsArray());
+
+    }
 
 
-        System.out.println(graph);
+    @Test
+    void myDijkstraTest_USA_TO_ETH() {
+        Set<Country> countries = dataLoaderService.loadData();
+
+        MyGraph graph = new MyGraph();
+
+        Country USA = countries.stream().filter(x -> x.getCountryCode().equals("USA")).findFirst().get();
+        Country ETH = countries.stream().filter(x -> x.getCountryCode().equals("ETH")).findFirst().get();
+
+        ETH = MyGraph.calculateShortestPathFromSource(graph, USA, ETH);
+
+
+        for (Country country: ETH.getShortestPath()) {
+            System.out.println(country.getName() + " - " + country.getDistance() + " - " + country.getCountryCode() + " - " + country.getCoordinates());
+        }
+        System.out.println(MyGraph.nodesOperationsNumber);
+        assertEquals( 0, ETH.getShortestPathAsArray().length);
+    }
+
+    @Test
+    void myDijkstraTest_ETH_TO_USA() {
+        Set<Country> countries = dataLoaderService.loadData();
+
+        MyGraph graph = new MyGraph();
+
+        Country ETH = countries.stream().filter(x -> x.getCountryCode().equals("ETH")).findFirst().get();
+        Country USA = countries.stream().filter(x -> x.getCountryCode().equals("USA")).findFirst().get();
+
+        USA = MyGraph.calculateShortestPathFromSource(graph, ETH, USA);
+
+        System.out.println(MyGraph.nodesOperationsNumber);
+        assertEquals( 0, USA.getShortestPathAsArray().length);
+    }
+
+    @Test
+    void myDijkstraTest_ETH_TO_GBR() {
+        Set<Country> countries = dataLoaderService.loadData();
+
+        MyGraph graph = new MyGraph();
+
+        Country ETH = countries.stream().filter(x -> x.getCountryCode().equals("ETH")).findFirst().get();
+        Country GBR = countries.stream().filter(x -> x.getCountryCode().equals("GBR")).findFirst().get();
+
+        GBR = MyGraph.calculateShortestPathFromSource(graph, ETH, GBR);
+
+        System.out.println(MyGraph.nodesOperationsNumber);
+        assertEquals( 0, GBR.getShortestPathAsArray().length);
+    }
+
+    @Test
+    void myDijkstraTest_IND_TO_PRT() {
+        Set<Country> countries = dataLoaderService.loadData();
+
+        MyGraph graph = new MyGraph();
+
+        Country IND = countries.stream().filter(x -> x.getCountryCode().equals("IND")).findFirst().get();
+        Country PRT = countries.stream().filter(x -> x.getCountryCode().equals("PRT")).findFirst().get();
+
+        PRT = MyGraph.calculateShortestPathFromSource(graph, IND, PRT);
+
+        for (Country country: PRT.getShortestPath()) {
+            System.out.println(country.getName() + " - " + country.getDistance() + " - " + country.getCountryCode() + " - " + country.getCoordinates());
+        }
+        String[] expectedPath = { "IND", "PAK", "IRN", "TUR", "BGR", "SRB", "HRV", "SVN", "AUT", "CHE", "FRA", "ESP",
+                "PRT" };
+        System.out.println(MyGraph.nodesOperationsNumber);
+        assertArrayEquals(expectedPath, PRT.getShortestPathAsArray());
     }
 
 }

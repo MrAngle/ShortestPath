@@ -40,7 +40,7 @@ public class Country {
     private String area;
 
     @JsonProperty("latlng")
-    private Vector<Float> coordinates;
+    private float[] coordinates;
 
     public static void connectAllCountries(Set<Country> countries) {
         for (Country country: countries) {
@@ -68,16 +68,20 @@ public class Country {
     private ArrayList<String> path = new ArrayList();
     private List<Country> shortestPath = new LinkedList<>();
 
-//    public void setDistance(int i) {
-//        distance = i;
-//    }
-
-    public void setDistance(float distance, Country country) {
+    public void setDistance(float distance) {
         this.distance = distance;
-        path.add(country.getCountryCode());
     }
 
     public List<Country> getShortestPath() {
         return shortestPath;
+    }
+
+    public float getShortestPathToSource() {
+        return shortestPath.get(shortestPath.size() - 1).distance;
+    }
+
+    public String[] getShortestPathAsArray() {
+        this.shortestPath.sort((country1, country2) -> country1.getDistance() < country2.getDistance() ? 1 : 0);
+        return this.shortestPath.stream().map(Country::getCountryCode).toArray(String[]::new);
     }
 }

@@ -17,7 +17,8 @@ public class BenchmarkRunner {
 
 
     private static DataLoaderByFileServiceImpl dataLoaderByFileService = new DataLoaderByFileServiceImpl();
-    private static long shortesTime = 999999999;
+    private static long minTime = 999999999;
+    private static long maxTime = -1;
 
     public static void main(String[] args) throws Exception {
         org.openjdk.jmh.Main.main(args);
@@ -26,30 +27,45 @@ public class BenchmarkRunner {
 
     }
 
+    void longExample() {
+        Set<Country> countries = dataLoaderByFileService.loadData();
+        MyGraph graph = new MyGraph();
+        Country NAM = countries.stream().filter(x -> x.getCountryCode().equals("NAM")).findFirst().get();
+        Country KOR = countries.stream().filter(x -> x.getCountryCode().equals("KOR")).findFirst().get();
+        MyGraph.calculateShortestPathFromSource(graph, NAM, KOR);
+    }
+
+    void shortExample() {
+        Set<Country> countries = dataLoaderByFileService.loadData();
+        MyGraph graph = new MyGraph();
+        Country CZE = countries.stream().filter(x -> x.getCountryCode().equals("CZE")).findFirst().get();
+        Country ITA = countries.stream().filter(x -> x.getCountryCode().equals("ITA")).findFirst().get();
+        MyGraph.calculateShortestPathFromSource(graph, CZE, ITA);
+    }
+
+
 
     @Benchmark
     @OutputTimeUnit(TimeUnit.NANOSECONDS)
     @BenchmarkMode(Mode.Throughput)
-    @Measurement(time = 1, timeUnit = TimeUnit.SECONDS, iterations = 1)
-    @Warmup(time = 1, timeUnit = TimeUnit.SECONDS, iterations = 1)
+    @Measurement(time = 5, timeUnit = TimeUnit.SECONDS, iterations = 1)
+    @Warmup(time = 5, timeUnit = TimeUnit.SECONDS, iterations = 2)
     public void init() {
         long startTime = System.currentTimeMillis();
 
-        Set<Country> countries = dataLoaderByFileService.loadData();
-        System.out.println(countries.size());
-        MyGraph graph = new MyGraph();
-        Country NAM = countries.stream().filter(x -> x.getCountryCode().equals("NAM")).findFirst().get();
-        for (Country country: countries) {
-            graph.addNode(country);
-        }
-        MyGraph.calculateShortestPathFromSource(graph, NAM);
+        shortExample();
 
         long endTime = System.currentTimeMillis();
-        if(shortesTime > (endTime-startTime) ) {
-            shortesTime = (endTime-startTime);
+        if(minTime > (endTime-startTime) ) {
+            minTime = (endTime-startTime);
+        }
+        if(maxTime < (endTime-startTime) ) {
+            maxTime = (endTime-startTime);
         }
 
+
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
-        System.out.println("Shortests: " + shortesTime);
+        System.out.println("MIN: " + minTime);
+        System.out.println("MAX: " + maxTime);
     }
 }

@@ -10,27 +10,28 @@ import java.util.Set;
 
 public class MyGraph {
 
-    private Set<Country> nodes = new HashSet<>();
+    public static int nodesOperationsNumber = 0;
 
-    public void addNode(Country nodeA) {
-        nodes.add(nodeA);
-    }
+    public static Country calculateShortestPathFromSource(MyGraph graph, Country from, Country to) {
+//        float shortestDistanceToDestination = Float.MAX_VALUE;
 
-    // getters and setters
-
-
-    public static MyGraph calculateShortestPathFromSource(MyGraph graph, Country source) {
-        source.setDistance(0f, source);
-//        source.setDistance(source);
+        from.setDistance(0f);
+        from.getShortestPath().add(from);
 
         Set<Country> settledNodes = new HashSet<>();
         Set<Country> unsettledNodes = new HashSet<>();
 
-        unsettledNodes.add(source);
-        while (unsettledNodes.size() != 0) {
-
+        unsettledNodes.add(from);
+        while (!unsettledNodes.isEmpty()) {
+            nodesOperationsNumber++;
             Country currentNode = getLowestDistanceNode(unsettledNodes);
             unsettledNodes.remove(currentNode);
+
+            // Skip node calculation if shortest Distance (if reached destination) is smaller than current node distance
+            if(to.getDistance() < currentNode.getDistance()) {
+                continue;
+            }
+
             for (Map.Entry<String, Country> adjacencyPair:
                     currentNode.getBorders().entrySet()) {
                 Country adjacentNode = adjacencyPair.getValue();
@@ -39,16 +40,17 @@ public class MyGraph {
                 if (!settledNodes.contains(adjacentNode)) {
                     calculateMinimumDistance(adjacentNode, edgeWeight, currentNode);
                     unsettledNodes.add(adjacentNode);
+
                 }
             }
             settledNodes.add(currentNode);
         }
-        return graph;
+        return to;
     }
 
     private static Country getLowestDistanceNode(Set <Country> unsettledNodes) {
         Country lowestDistanceNode = null;
-        float lowestDistance = Integer.MAX_VALUE;
+        float lowestDistance = Float.MAX_VALUE;
         for (Country node: unsettledNodes) {
             float nodeDistance = node.getDistance();
             if (nodeDistance < lowestDistance) {
@@ -63,14 +65,14 @@ public class MyGraph {
                                                  float edgeWeigh, Country sourceNode) {
         float sourceDistance = sourceNode.getDistance();
         if (sourceDistance + edgeWeigh < evaluationNode.getDistance()) {
-
             float dist = sourceDistance + NodeRelation.calculateVector(evaluationNode.getCoordinates(),
                     sourceNode.getCoordinates());
 
-            evaluationNode.setDistance(dist, evaluationNode);
+            evaluationNode.setDistance(dist);
             LinkedList<Country> shortestPath = new LinkedList<>(sourceNode.getShortestPath());
-            shortestPath.add(sourceNode);
+            shortestPath.add(evaluationNode);
             evaluationNode.setShortestPath(shortestPath);
         }
     }
+
 }
