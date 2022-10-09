@@ -86,20 +86,6 @@ public class DataLoaderTest {
     @Test
     void myDijkstraTest() {
         Set<Country> countries = dataLoaderService.loadData();
-        System.out.println(countries);
-
-//        Set<Country> filteredCountries =
-//                countries.stream().filter(x -> x.getSubregion().equals("Central Europe") || x.getSubregion().equals(
-//                        "Southern Europe") ).collect(Collectors.toSet());
-//
-//        Country pol = countries.stream().filter(x -> x.getCountryCode().equalsIgnoreCase("POL")).findFirst().get();
-//        Country cze = countries.stream().filter(x -> x.getCountryCode().equalsIgnoreCase("CZE")).findFirst().get();
-//        Country UKR = countries.stream().filter(x -> x.getCountryCode().equalsIgnoreCase("UKR")).findFirst().get();
-//        Country DEU = countries.stream().filter(x -> x.getCountryCode().equalsIgnoreCase("DEU")).findFirst().get();
-//        Country AUT = countries.stream().filter(x -> x.getCountryCode().equalsIgnoreCase("AUT")).findFirst().get();
-//        Country SVK = countries.stream().filter(x -> x.getCountryCode().equalsIgnoreCase("SVK")).findFirst().get();
-//        Country HUN = countries.stream().filter(x -> x.getCountryCode().equalsIgnoreCase("HUN")).findFirst().get();
-//        Country ITA = countries.stream().filter(x -> x.getCountryCode().equalsIgnoreCase("ITA")).findFirst().get();
 
         MyGraph graph = new MyGraph();
         Country pol = countries.stream().filter(x -> x.getCountryCode().equalsIgnoreCase("POL")).findFirst().get();
@@ -109,13 +95,6 @@ public class DataLoaderTest {
             graph.addNode(country);
         }
 
-//        graph.addNode(cze);
-//        graph.addNode(UKR);
-//        graph.addNode(DEU);
-//        graph.addNode(AUT);
-//        graph.addNode(SVK);
-//        graph.addNode(HUN);
-//        graph.addNode(ITA);
         graph = MyGraph.calculateShortestPathFromSource(graph, NAM);
 
         Country KOR =  countries.stream().filter(x -> x.getCountryCode().equals("VNM")).findFirst().get();

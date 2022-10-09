@@ -13,8 +13,6 @@ public class Graph {
         nodes.add(nodeA);
     }
 
-    // getters and setters
-
 
     public static Graph calculateShortestPathFromSource(Graph graph, Node source) {
         source.setDistance(0);

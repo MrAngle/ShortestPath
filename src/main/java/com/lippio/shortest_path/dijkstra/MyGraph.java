@@ -10,7 +10,6 @@ import java.util.Set;
 
 public class MyGraph {
 
-//    private Set<MyNode> nodes = new HashSet<>();
     private Set<Country> nodes = new HashSet<>();
 
     public void addNode(Country nodeA) {

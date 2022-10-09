@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.lippio.shortest_path.dijkstra.MyNode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,8 +23,6 @@ import java.util.Vector;
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Country {
-
-
 
     @JsonDeserialize(using = CountryNameDeserializer.class, as=String.class)
     @JsonProperty("name")
@@ -47,7 +44,7 @@ public class Country {
 
     public static void connectAllCountries(Set<Country> countries) {
         for (Country country: countries) {
-            if(country.getBorders() == null && country.getBorders().isEmpty()) {
+            if(country.getBorders() == null || country.getBorders().isEmpty()) {
                 continue;
             }
 
@@ -66,8 +63,6 @@ public class Country {
     }
 
     // DJIKSTRA
-
-//    @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private float distance = Float.MAX_VALUE;
     private ArrayList<String> path = new ArrayList();
