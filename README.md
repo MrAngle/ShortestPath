@@ -1,4 +1,5 @@
 HOW TO RUN:
+=============================================
 
 Java version: 17
 
@@ -8,13 +9,16 @@ To run application:
 - mvn spring-boot:run -Dspring-boot.run.profiles=prod
 - mvn spring-boot:run
 
+3. App will be ready on: localhost:8080
+
+
 PROFILES:
 - prod - use datasource based on external file
 - default/dev/test - use local datasource file
- 
-=============================================
+
 
 Description:
+=============================================
 
 Application based on Dijkstra algorithm to find the shortest path from one country to another. For This example:
 - Dijkstra node/vortex - defined as country
