@@ -10,7 +10,6 @@ import java.io.IOException;
 
 public class CountryNameDeserializer extends JsonDeserializer<String> {
 
-
     @Override
     public String deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         ObjectMapper mapper = (ObjectMapper) p.getCodec();

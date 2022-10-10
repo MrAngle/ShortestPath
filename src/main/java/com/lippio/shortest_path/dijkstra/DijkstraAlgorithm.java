@@ -7,8 +7,7 @@ import java.util.Set;
 
 public class DijkstraAlgorithm {
 
-    public static int nodesOperationsNumber = 0;
-
+    private DijkstraAlgorithm() {}
 
     public static List<CountryNode> calculateShortestPathFromSource(CountryNode from, CountryNode to) {
 
@@ -20,7 +19,6 @@ public class DijkstraAlgorithm {
 
         unsettledNodes.add(from);
         while (!unsettledNodes.isEmpty()) {
-            nodesOperationsNumber++;
             CountryNode currentNode = getLowestDistanceNode(unsettledNodes);
             unsettledNodes.remove(currentNode);
 

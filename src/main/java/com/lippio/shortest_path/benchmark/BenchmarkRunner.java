@@ -30,7 +30,7 @@ public class BenchmarkRunner {
     }
 
     void shortExample () {
-        Set<Country> countries = dataLoaderByFileService.loadData();
+        Set<Country> countries = dataLoaderByFileService.getCountries();
 
         Set<CountryNode> countryNodes = CountryNode.toCountryNodes(countries);
         CountryNode fromNode =
@@ -42,7 +42,7 @@ public class BenchmarkRunner {
     }
 
     void longExample() {
-        Set<Country> countries = dataLoaderByFileService.loadData();
+        Set<Country> countries = dataLoaderByFileService.getCountries();
 
         Set<CountryNode> countryNodes = CountryNode.toCountryNodes(countries);
         CountryNode fromNode =
@@ -61,21 +61,6 @@ public class BenchmarkRunner {
     @Measurement(time = 5, timeUnit = TimeUnit.SECONDS, iterations = 1)
     @Warmup(time = 5, timeUnit = TimeUnit.SECONDS, iterations = 2)
     public void init() {
-        long startTime = System.currentTimeMillis();
-
         longExample();
-
-        long endTime = System.currentTimeMillis();
-        if(minTime > (endTime-startTime) ) {
-            minTime = (endTime-startTime);
-        }
-        if(maxTime < (endTime-startTime) ) {
-            maxTime = (endTime-startTime);
-        }
-
-
-        System.out.println("Total execution time: " + (endTime-startTime) + "ms");
-        System.out.println("MIN: " + minTime);
-        System.out.println("MAX: " + maxTime);
     }
 }

@@ -1,9 +1,9 @@
-package com.lippio.shortest_path.pojo;
+package com.lippio.shortest_path.dijkstra;
 
 
 import java.util.List;
 
-public interface DijkstraDistance<T> {
+public interface IDijkstraNode<T> {
 
     float calculateDistance(T t);
 

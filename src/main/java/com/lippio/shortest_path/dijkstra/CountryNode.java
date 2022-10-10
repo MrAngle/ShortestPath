@@ -23,7 +23,7 @@ public class CountryNode implements ICountryDijkstraNode {
     @Setter(AccessLevel.NONE)
     private float distance = Float.MAX_VALUE;
     private List<CountryNode> shortestPath = new LinkedList<>();
-    private List<CountryNode> adjustedNodes = new LinkedList<>();
+    private Set<CountryNode> adjustedNodes = new HashSet<>();
 
     private CountryNode(Country country) {
         this.country = country;
@@ -74,7 +74,7 @@ public class CountryNode implements ICountryDijkstraNode {
         }
 
         for (CountryNode countryNode : countryNodes) {
-            List<CountryNode> adjustedNodes = countryNode.getAdjustedNodes();
+            Set<CountryNode> adjustedNodes = countryNode.getAdjustedNodes();
 
             for (Country country : countryNode.getCountry().getAdjustedNodes()) {
                 adjustedNodes.add(countryNodes.stream()

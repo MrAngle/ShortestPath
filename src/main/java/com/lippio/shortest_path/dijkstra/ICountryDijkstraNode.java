@@ -4,6 +4,7 @@ import com.lippio.shortest_path.pojo.Country;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 
 // TODO: Make it generic if needed
@@ -11,7 +12,7 @@ public interface ICountryDijkstraNode {
 
     String getName();
 
-    List<CountryNode> getAdjustedNodes();
+    Set<CountryNode> getAdjustedNodes();
 
     float getDistance();
 

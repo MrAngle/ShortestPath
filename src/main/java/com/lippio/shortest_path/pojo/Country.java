@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.lippio.shortest_path.dijkstra.IDijkstraNode;
 import com.lippio.shortest_path.jackson.CountryNameDeserializer;
 import com.lippio.shortest_path.jackson.NodeRelationDeserializer;
 import com.lippio.shortest_path.util.Utils;
@@ -24,7 +25,7 @@ import java.util.Set;
 @Setter
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Country implements DijkstraDistance<Country> {
+public class Country implements IDijkstraNode<Country> {
 
     @JsonDeserialize(using = CountryNameDeserializer.class, as=String.class)
     @JsonProperty("name")

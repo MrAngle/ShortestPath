@@ -6,6 +6,6 @@ import java.util.Set;
 
 public interface DataLoaderService {
 
-    Set<Country> loadData();
+    Set<Country> getCountries();
 
 }
