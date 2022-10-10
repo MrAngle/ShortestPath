@@ -4,25 +4,27 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import lombok.AccessLevel;
+import com.lippio.shortest_path.jackson.CountryNameDeserializer;
+import com.lippio.shortest_path.jackson.NodeRelationDeserializer;
+import com.lippio.shortest_path.util.Utils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
-import java.util.Vector;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Country {
+public class Country implements DijkstraDistance<Country> {
 
     @JsonDeserialize(using = CountryNameDeserializer.class, as=String.class)
     @JsonProperty("name")
@@ -31,13 +33,9 @@ public class Country {
     @JsonProperty("cca3")
     private String countryCode;
 
-    private String region;
-    private String subregion;
-
     @JsonIdentityReference(alwaysAsId = true)
     @JsonDeserialize(using = NodeRelationDeserializer.class, as=Map.class)
     private Map<String, Country> borders;
-    private String area;
 
     @JsonProperty("latlng")
     private float[] coordinates;
@@ -51,37 +49,37 @@ public class Country {
             for (Map.Entry<String, Country> entry : country.getBorders().entrySet()) {
                 entry.setValue(
                         countries.stream().filter(x ->
-                        entry.getKey().equals(x.getCountryCode())).findFirst().orElseThrow());
+                        entry.getKey().equalsIgnoreCase(x.getCountryCode())).findFirst().orElseThrow());
             }
         }
     }
 
-    public static float calculateVector(Vector<Float> v1, Vector<Float> v2) {
-        float x = v1.get(0) - v2.get(0);
-        float y = v1.get(1) - v2.get(1);
-        return (float) Math.sqrt((x * x) + (y * y));
+    @Override
+    public float calculateDistance(Country country) {
+        return Utils.calculateVector(this.getCoordinates(), country.getCoordinates());
     }
 
-    // DJIKSTRA
-    @Setter(AccessLevel.NONE)
-    private float distance = Float.MAX_VALUE;
-    private ArrayList<String> path = new ArrayList();
-    private List<Country> shortestPath = new LinkedList<>();
-
-    public void setDistance(float distance) {
-        this.distance = distance;
+    @Override
+    public List<Country> getAdjustedNodes() {
+        return new ArrayList<>(getBorders().values());
     }
 
-    public List<Country> getShortestPath() {
-        return shortestPath;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Country country = (Country) o;
+        return name.equals(country.name) && countryCode.equals(country.countryCode) && Arrays.equals(coordinates, country.coordinates);
     }
 
-    public float getShortestPathToSource() {
-        return shortestPath.get(shortestPath.size() - 1).distance;
-    }
-
-    public String[] getShortestPathAsArray() {
-        this.shortestPath.sort((country1, country2) -> country1.getDistance() < country2.getDistance() ? 1 : 0);
-        return this.shortestPath.stream().map(Country::getCountryCode).toArray(String[]::new);
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(name, countryCode);
+        result = 31 * result + Arrays.hashCode(coordinates);
+        return result;
     }
 }

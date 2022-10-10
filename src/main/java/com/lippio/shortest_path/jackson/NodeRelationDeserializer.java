@@ -1,11 +1,10 @@
-package com.lippio.shortest_path.pojo;
+package com.lippio.shortest_path.jackson;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.lippio.shortest_path.pojo.Country;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,14 +14,9 @@ public class NodeRelationDeserializer extends JsonDeserializer<Map<String, Count
 
     @Override
     public Map<String, Country> deserialize(JsonParser jsonParser,
-                                            DeserializationContext deserializationContext) throws IOException, JacksonException {
+                                            DeserializationContext deserializationContext) throws IOException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-
-        // TODO Merge it
-        if(node == null || node.isEmpty()) {
-            return new HashMap<>();
-        }
-        if(!node.isArray()) {
+        if(node == null || node.isEmpty() || !node.isArray()) {
             return new HashMap<>();
         }
 

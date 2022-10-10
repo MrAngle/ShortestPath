@@ -1,6 +1,7 @@
 package com.lippio.shortest_path.benchmark;
 
-import com.lippio.shortest_path.dijkstra.MyGraph;
+import com.lippio.shortest_path.dijkstra.CountryNode;
+import com.lippio.shortest_path.dijkstra.DijkstraAlgorithm;
 import com.lippio.shortest_path.pojo.Country;
 import com.lippio.shortest_path.service.DataLoaderByFileServiceImpl;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -10,6 +11,7 @@ import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Warmup;
 
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -27,20 +29,28 @@ public class BenchmarkRunner {
 
     }
 
-    void longExample() {
+    void shortExample () {
         Set<Country> countries = dataLoaderByFileService.loadData();
-        MyGraph graph = new MyGraph();
-        Country NAM = countries.stream().filter(x -> x.getCountryCode().equals("NAM")).findFirst().get();
-        Country KOR = countries.stream().filter(x -> x.getCountryCode().equals("KOR")).findFirst().get();
-        MyGraph.calculateShortestPathFromSource(graph, NAM, KOR);
+
+        Set<CountryNode> countryNodes = CountryNode.toCountryNodes(countries);
+        CountryNode fromNode =
+                countryNodes.stream().filter(x -> x.getCountry().getCountryCode().equalsIgnoreCase("CZE")).findFirst().orElseThrow();
+        CountryNode toNode =
+                countryNodes.stream().filter(x -> x.getCountry().getCountryCode().equalsIgnoreCase("ITA")).findFirst().orElseThrow();
+
+        List<CountryNode> shortestPath = DijkstraAlgorithm.calculateShortestPathFromSource(fromNode, toNode);
     }
 
-    void shortExample() {
+    void longExample() {
         Set<Country> countries = dataLoaderByFileService.loadData();
-        MyGraph graph = new MyGraph();
-        Country CZE = countries.stream().filter(x -> x.getCountryCode().equals("CZE")).findFirst().get();
-        Country ITA = countries.stream().filter(x -> x.getCountryCode().equals("ITA")).findFirst().get();
-        MyGraph.calculateShortestPathFromSource(graph, CZE, ITA);
+
+        Set<CountryNode> countryNodes = CountryNode.toCountryNodes(countries);
+        CountryNode fromNode =
+                countryNodes.stream().filter(x -> x.getCountry().getCountryCode().equalsIgnoreCase("NAM")).findFirst().orElseThrow();
+        CountryNode toNode =
+                countryNodes.stream().filter(x -> x.getCountry().getCountryCode().equalsIgnoreCase("VNM")).findFirst().orElseThrow();
+
+        List<CountryNode> shortestPath = DijkstraAlgorithm.calculateShortestPathFromSource(fromNode, toNode);
     }
 
 
@@ -53,7 +63,7 @@ public class BenchmarkRunner {
     public void init() {
         long startTime = System.currentTimeMillis();
 
-        shortExample();
+        longExample();
 
         long endTime = System.currentTimeMillis();
         if(minTime > (endTime-startTime) ) {
