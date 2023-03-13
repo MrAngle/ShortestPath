@@ -84,6 +84,48 @@ paths:
               schema:
                 $ref: '#/components/schemas/CountryDetailsDTO'
 
+  /trip:
+    post:
+      summary: 'Save trip'
+      operationId: 'saveTrip'
+      description: >
+        ## TODO
+      parameters:
+        - in: header
+          name: headers
+          schema:
+            $ref: '#/components/schemas/Headers'
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestTripDTO'
+      responses:
+        '200':
+          description: OK
+    get:
+      summary: 'Get all trips'
+      operationId: 'getAll'
+      description: >
+        ## TODO
+      parameters:
+        - in: header
+          name: headers
+          schema:
+            $ref: '#/components/schemas/Headers'
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResponseTripDTO'
+
 components:
   schemas:
     Headers:
@@ -119,3 +161,22 @@ components:
           type: array
           items:
             type: float
+    RequestTripDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 128
+        countries:
+          type: string
+    ResponseTripDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 128
+        countries:
+          type: string
+        createdAt:
+          type: string
+          format: date

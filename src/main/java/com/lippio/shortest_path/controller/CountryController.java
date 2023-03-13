@@ -20,7 +20,7 @@ import java.util.Map;
 @AllArgsConstructor
 // TODO: Handle cross origin better
 @CrossOrigin(origins = {"http://localhost:4200"})
-public class CountryRoutingController implements CountryApi {
+public class CountryController implements CountryApi {
 
     private final ShortestPathService shortestPathService;
     private final CountryService countryService;
