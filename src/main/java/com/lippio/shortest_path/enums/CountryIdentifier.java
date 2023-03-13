@@ -2,6 +2,7 @@ package com.lippio.shortest_path.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.lippio.shortest_path.dijkstra.CountryNode;
+import com.lippio.shortest_path.pojo.Country;
 
 import java.util.function.Predicate;
 
@@ -25,11 +26,18 @@ public enum CountryIdentifier {
     }
 
 
-    public Predicate<CountryNode> getCountryFilterPredicate(String identifier) {
+    public Predicate<CountryNode> getCountryNodeFilterPredicate(String identifier) {
         return switch (this) {
             case ISO_CODE -> c -> c.getCountry().getIsoCode().equalsIgnoreCase(identifier);
             case CCA_3 -> c -> c.getCountry().getCountryCode().equalsIgnoreCase(identifier);
             case NAME -> c -> c.getCountry().getName().equalsIgnoreCase(identifier);
+        };
+    }
+    public Predicate<Country> getCountryFilterPredicate(String identifier) {
+        return switch (this) {
+            case ISO_CODE -> c -> c.getIsoCode().equalsIgnoreCase(identifier);
+            case CCA_3 -> c -> c.getCountryCode().equalsIgnoreCase(identifier);
+            case NAME -> c -> c.getName().equalsIgnoreCase(identifier);
         };
     }
 }

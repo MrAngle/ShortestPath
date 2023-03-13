@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum Errors {
     COUNTRY_NOT_FOUND("Country not found", HttpStatus.BAD_REQUEST),
-    PATH_NOT_FOUND("Path not found", HttpStatus.BAD_REQUEST),
+    PATH_NOT_FOUND("Land path not found", HttpStatus.BAD_REQUEST),
     FETCHING_COUNTRY_INTERNAL_ERROR("Unable to fetch country information", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final String message;

@@ -9,6 +9,7 @@ import com.lippio.shortest_path.jackson.CountryNameDeserializer;
 import com.lippio.shortest_path.jackson.NodeRelationDeserializer;
 import com.lippio.shortest_path.util.Utils;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +25,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Setter
 @Getter
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Country implements IDijkstraNode<Country> {
 
@@ -33,6 +35,9 @@ public class Country implements IDijkstraNode<Country> {
 
     @JsonProperty("cca3")
     private String countryCode;
+
+    @JsonProperty("region")
+    private String region;
 
     @JsonProperty("cca2")
     private String isoCode;

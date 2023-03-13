@@ -1,6 +1,7 @@
 package com.lippio.shortest_path.service;
 
 import com.lippio.shortest_path.dijkstra.CountryNode;
+import com.lippio.shortest_path.enums.CountryIdentifier;
 import com.lippio.shortest_path.errors.Errors;
 import com.lippio.shortest_path.errors.RestException;
 import com.lippio.shortest_path.pojo.Country;
@@ -21,6 +22,10 @@ public class CountryServiceImpl implements CountryService {
     public Set<Country> getCountries() {
         return dataLoaderService.getCountries();
     }
+    @Override
+    public Country getCountry(String countryCode, CountryIdentifier countryIdentifier) {
+        return findCountry(countryIdentifier.getCountryFilterPredicate(countryCode));
+    }
 
     @Override
     public Set<CountryNode> getAllCountryNodes() {
@@ -30,6 +35,13 @@ public class CountryServiceImpl implements CountryService {
     @Override
     public CountryNode getCountryNode(Set<CountryNode> countryNodes, final Predicate<CountryNode> filter) {
         return countryNodes.stream()
+            .filter(filter)
+            .findFirst()
+            .orElseThrow(() -> new RestException(Errors.COUNTRY_NOT_FOUND));
+    }
+
+    private Country findCountry(final Predicate<Country> filter) {
+        return getCountries().stream()
             .filter(filter)
             .findFirst()
             .orElseThrow(() -> new RestException(Errors.COUNTRY_NOT_FOUND));

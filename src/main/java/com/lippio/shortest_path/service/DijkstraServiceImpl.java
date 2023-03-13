@@ -38,9 +38,9 @@ public class DijkstraServiceImpl implements DijkstraService {
         final Set<CountryNode> countryNodes = countryService.getAllCountryNodes();
 
         final CountryNode originNode = countryService.getCountryNode(countryNodes,
-            countryIdentifier.getCountryFilterPredicate(origin));
+            countryIdentifier.getCountryNodeFilterPredicate(origin));
         final CountryNode destinationNode = countryService.getCountryNode(countryNodes,
-            countryIdentifier.getCountryFilterPredicate(destination));
+            countryIdentifier.getCountryNodeFilterPredicate(destination));
 
         return calculate(originNode, destinationNode);
     }
