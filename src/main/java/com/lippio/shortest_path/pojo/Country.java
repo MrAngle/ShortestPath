@@ -34,6 +34,9 @@ public class Country implements IDijkstraNode<Country> {
     @JsonProperty("cca3")
     private String countryCode;
 
+    @JsonProperty("cca2")
+    private String isoCode;
+
     @JsonIdentityReference(alwaysAsId = true)
     @JsonDeserialize(using = NodeRelationDeserializer.class, as=Map.class)
     private Map<String, Country> borders;

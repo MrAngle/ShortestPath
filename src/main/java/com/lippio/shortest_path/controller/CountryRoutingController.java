@@ -1,31 +1,35 @@
 package com.lippio.shortest_path.controller;
 
-import com.lippio.shortest_path.errors.Errors;
-import com.lippio.shortest_path.errors.RestException;
-import com.lippio.shortest_path.service.DijkstraService;
+import com.example.api.generated.model.CountryIdentifierTypeDTO;
+import com.example.generated.api.CountryRoutingApi;
+import com.lippio.shortest_path.service.ShortestPathService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/routing")
 @AllArgsConstructor
-public class CountryRoutingController {
+// TODO: Handle cross origin better
+@CrossOrigin(origins = {"http://localhost:4200"})
+public class CountryRoutingController implements CountryRoutingApi {
 
-    private DijkstraService dijkstraService;
+    private final ShortestPathService shortestPathService;
 
-    @GetMapping(path = "/{from}/{to}")
-    public ResponseEntity<List<String>> calculatePath(@PathVariable("from") String from,
-                                                      @PathVariable("to") String to) {
-        List<String> shortestPath = dijkstraService.getShortestPath(from, to);
+    @Override
+    public ResponseEntity<List<String>> countryRouting(final Map<String, String> headers,
+                                                       final String origin,
+                                                       final String destination,
+                                                       final CountryIdentifierTypeDTO countryIdentifierType) {
+        System.out.println("Im here");
+        List<String> shortestPath = shortestPathService.getShortestPath(
+            origin,
+            destination,
+            countryIdentifierType);
         return ResponseEntity.status(HttpStatus.OK).body(shortestPath);
-
-
     }
 }

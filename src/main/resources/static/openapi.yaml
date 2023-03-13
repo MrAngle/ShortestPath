@@ -1,0 +1,70 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: questionnaire-api
+  description: >
+    # Service overview:
+    TODO
+    
+
+paths:
+  /country-routing/{from}/{to}:
+    get:
+      summary: 'Calculate path for selected countries'
+      operationId: 'CountryRouting'
+      description: >
+        ## TODO
+      parameters:
+        - in: header
+          name: headers
+          schema:
+            $ref: '#/components/schemas/Headers'
+          required: true
+        - in: path
+          name: from
+          required: true
+          description: The starting point.
+          schema:
+            type: string
+        - in: path
+          name: to
+          required: true
+          description: The destination point.
+          schema:
+            type: string
+        - in: query
+          name: countryIdentifierType
+          description: Interpretation method for from/to parameters
+          required: false
+          schema:
+            $ref: '#/components/schemas/CountryIdentifierTypeDTO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+# TODO
+#        '400':
+#          $ref: '#/components/responses/400'
+#        '404':
+#          $ref: '#/components/responses/404'
+
+components:
+  schemas:
+    Headers:
+      type: object
+      additionalProperties:
+        type: string
+
+    CountryIdentifierTypeDTO:
+      type: string
+      default: ISO_CODE
+      description: Interpretation method for from/to parameters
+      enum:
+        - ISO_CODE
+        - CCA_3
+        - NAME

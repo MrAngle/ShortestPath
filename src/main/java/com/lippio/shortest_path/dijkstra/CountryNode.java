@@ -17,7 +17,7 @@ import java.util.Set;
 // TODO: Make it generic if needed
 @Getter
 @Setter
-public class CountryNode implements ICountryDijkstraNode {
+public final class CountryNode implements ICountryDijkstraNode {
 
     private Country country;
     @Setter(AccessLevel.NONE)
