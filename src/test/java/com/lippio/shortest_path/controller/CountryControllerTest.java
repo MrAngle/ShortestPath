@@ -26,6 +26,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -77,10 +79,11 @@ class CountryControllerTest {
         CountryDetailsDTO countryDetailsDTO =
             new ObjectMapper().readValue(result.getResponse().getContentAsString(), CountryDetailsDTO.class);
 
-        assertThat(countryDetailsDTO.getName()).isEqualTo(country.getName());
-        assertThat(countryDetailsDTO.getIsoCode()).isEqualTo(country.getIsoCode());
-        assertThat(countryDetailsDTO.getRegion()).isEqualTo(country.getRegion());
-        assertThat(countryDetailsDTO.getCountryCode()).isEqualTo(country.getCountryCode());
+        assertAll(
+            () -> assertEquals(countryDetailsDTO.getName(), country.getName()),
+            () -> assertEquals(countryDetailsDTO.getIsoCode(), country.getIsoCode()),
+            () -> assertEquals(countryDetailsDTO.getRegion(), country.getRegion()),
+            () -> assertEquals(countryDetailsDTO.getCountryCode(), country.getCountryCode()));
     }
 
     @Test
@@ -96,9 +99,10 @@ class CountryControllerTest {
         MvcResult result = mockMvc.perform(get("/country/WRONG")
                 .param("countryIdentifierType", countryIdentifierTypeDTO.getValue())
                 .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest())
+            .andExpect(status().isNotFound())
             .andReturn();
 
+        // then
         verify(countryService, times(1))
             .getCountry("WRONG", countryIdentifier);
 
@@ -115,8 +119,10 @@ class CountryControllerTest {
             .thenReturn(shortestPath);
 
         // when
-        MvcResult result = mockMvc.perform(get("/country/routing/PL/FR")
+        MvcResult result = mockMvc.perform(get("/country/routing")
                 .param("countryIdentifierType", "ISO_CODE")
+                .param("from", "PL")
+                .param("to", "FR")
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andReturn();
@@ -137,8 +143,10 @@ class CountryControllerTest {
             .thenThrow(new RestException(Errors.PATH_NOT_FOUND));
 
         // when
-        MvcResult result = mockMvc.perform(get("/country/routing/PL/FR")
+        MvcResult result = mockMvc.perform(get("/country/routing")
                 .param("countryIdentifierType", countryIdentifierTypeDTO.getValue())
+                .param("from", "PL")
+                .param("to", "FR")
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest())
             .andReturn();

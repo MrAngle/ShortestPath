@@ -121,7 +121,7 @@ class DijkstraServiceTest {
             fail();
         } catch (RestException exception) {
             assertEquals("Country not found", exception.getMessage());
-            assertEquals(400, exception.getErrors().getStatus().value());
+            assertEquals(404, exception.getErrors().getStatus().value());
         }
     }
 }

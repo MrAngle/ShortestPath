@@ -38,6 +38,7 @@ public class DataLoaderByFileServiceImpl implements DataLoaderService {
 
         Country[] map;
         try {
+            log.info("Load data from file...");
             map = mapper.readValue(ResourceUtils.getFile("classpath:countries.json"), Country[].class);
         } catch (IOException e) {
             log.error("Unable to read value: {0}", e.getCause());

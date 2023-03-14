@@ -1,13 +1,13 @@
 openapi: 3.0.3
 info:
   version: 1.0.0
-  title: questionnaire-api
+  title: shortest-path
   description: >
     # Service overview:
     TODO
 
 paths:
-  /country/routing/{from}/{to}:
+  /country/routing:
     get:
       summary: 'Calculate path for selected countries'
       operationId: 'CountryRouting'
@@ -19,13 +19,13 @@ paths:
           schema:
             $ref: '#/components/schemas/Headers'
           required: true
-        - in: path
+        - in: query
           name: from
           required: true
           description: The starting point.
           schema:
             type: string
-        - in: path
+        - in: query
           name: to
           required: true
           description: The destination point.
@@ -46,7 +46,18 @@ paths:
                 type: array
                 items:
                   type: string
-        # TODO add '400':
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
 
   /country/{countryCode}:
     get:
@@ -57,18 +68,18 @@ paths:
       parameters:
         - in: header
           name: headers
+          required: true
           schema:
             $ref: '#/components/schemas/Headers'
-          required: true
         - in: path
           name: countryCode
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/CountryCode'
         - in: query
           name: countryIdentifierType
-          description: Interpretation method for from/to parameters
           required: false
+          description: Interpretation method for from/to parameters
           schema:
             $ref: '#/components/schemas/CountryIdentifierTypeDTO'
       responses:
@@ -78,7 +89,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CountryDetailsDTO'
-        # TODO add '400':
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
 
   /trip:
     post:
@@ -99,9 +121,20 @@ paths:
             schema:
               $ref: '#/components/schemas/RequestTripDTO'
       responses:
-        '200':
-          description: OK
-        # TODO add '400':
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
     get:
       summary: 'Get all trips'
       operationId: 'getAll'
@@ -122,7 +155,18 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ResponseTripDTO'
-        # TODO add '400':
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
 
 components:
   schemas:
@@ -151,14 +195,21 @@ components:
           maxLength: 128
         isoCode:
           type: string
-          maxLength: 128
+          maxLength: 2
+          minLength: 2
         countryCode:
-          type: string
-          maxLength: 128
+          $ref: '#/components/schemas/CountryCode'
         coordinates:
           type: array
           items:
-            type: float
+            type: number
+            format: float
+      required:
+        - name
+        - region
+        - isoCode
+        - countryCode
+        - coordinates
     RequestTripDTO:
       type: object
       properties:
@@ -166,7 +217,10 @@ components:
           type: string
           maxLength: 128
         countries:
-          type: string
+          $ref: '#/components/schemas/CountriesList'
+      required:
+        - name
+        - countries
     ResponseTripDTO:
       type: object
       properties:
@@ -174,7 +228,43 @@ components:
           type: string
           maxLength: 128
         countries:
-          type: string
+          $ref: '#/components/schemas/CountriesList'
         createdAt:
           type: string
           format: date
+      required:
+        - name
+        - countries
+        - createdAt
+
+    CountriesList:
+      type: string
+      pattern: '^[A-Z]{3}(,[A-Z]{3})*$'
+      example: "USA,GBR,CAN"
+
+    CountryCode:
+      type: string
+      maxLength: 3
+      minLength: 3
+      example: "USA"
+
+    Response400:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      required:
+        - code
+        - message
+    Response404:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      required:
+        - code
+        - message

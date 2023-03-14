@@ -4,6 +4,7 @@ import com.lippio.shortest_path.errors.Errors;
 import com.lippio.shortest_path.errors.RestException;
 import com.lippio.shortest_path.pojo.Country;
 import com.lippio.shortest_path.service.DataLoaderService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.Set;
 
 @Service
 @Profile(value = "prod")
+@Slf4j
 public class DataLoaderByLinkServiceImpl implements DataLoaderService {
 
     private final Set<Country> countries;
@@ -34,6 +36,7 @@ public class DataLoaderByLinkServiceImpl implements DataLoaderService {
     }
 
     private Set<Country> loadData() {
+        log.info("Load country data by link...");
         Country[] response = restTemplate.getForObject(dataSource, Country[].class);
         if (response == null || response.length == 0) {
             throw new RestException(Errors.FETCHING_COUNTRY_INTERNAL_ERROR);
