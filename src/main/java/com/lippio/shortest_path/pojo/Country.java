@@ -65,7 +65,7 @@ public class Country implements IDijkstraNode<Country> {
 
     @Override
     public float calculateDistance(Country country) {
-        return Utils.calculatePy(this.getCoordinates(), country.getCoordinates());
+        return Utils.calculateDistance(this.getCoordinates(), country.getCoordinates());
     }
 
     @Override

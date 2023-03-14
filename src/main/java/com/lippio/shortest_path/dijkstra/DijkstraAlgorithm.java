@@ -10,21 +10,20 @@ public final class DijkstraAlgorithm {
 
     private DijkstraAlgorithm() {}
 
-    public static List<CountryNode> calculateShortestPathFromSource(CountryNode from, CountryNode to) {
-
+    public static List<CountryNode> calculateShortestPathFromSource(final CountryNode from, final CountryNode to) {
         from.setDistance(0f);
         from.getShortestPath().add(from);
 
-        Set<CountryNode> settledNodes = new HashSet<>();
-        Set<CountryNode> unsettledNodes = new HashSet<>();
+        final Set<CountryNode> settledNodes = new HashSet<>();
+        final Set<CountryNode> unsettledNodes = new HashSet<>();
 
         unsettledNodes.add(from);
         while (!unsettledNodes.isEmpty()) {
-            Optional<CountryNode> optCurrentNode = getLowestDistanceNode(unsettledNodes);
+            final Optional<CountryNode> optCurrentNode = getLowestDistanceNode(unsettledNodes);
             if(optCurrentNode.isEmpty()) {
                 throw new IllegalArgumentException("Unexpected empty node");
             }
-            CountryNode currentNode = optCurrentNode.get();
+            final CountryNode currentNode = optCurrentNode.get();
             unsettledNodes.remove(currentNode);
 
             // Skip node calculation if shortest Distance (if reached destination) is smaller than current node distance

@@ -11,10 +11,10 @@ import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Warmup;
 
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+// ONLY FOR PERFORMANCE TEST PURPOSES
 public class BenchmarkRunner {
 
 
@@ -38,7 +38,7 @@ public class BenchmarkRunner {
         CountryNode toNode =
                 countryNodes.stream().filter(x -> x.getCountry().getCountryCode().equalsIgnoreCase("ITA")).findFirst().orElseThrow();
 
-        List<CountryNode> shortestPath = DijkstraAlgorithm.calculateShortestPathFromSource(fromNode, toNode);
+        DijkstraAlgorithm.calculateShortestPathFromSource(fromNode, toNode);
     }
 
     void longExample() {
@@ -50,7 +50,7 @@ public class BenchmarkRunner {
         CountryNode toNode =
                 countryNodes.stream().filter(x -> x.getCountry().getCountryCode().equalsIgnoreCase("VNM")).findFirst().orElseThrow();
 
-        List<CountryNode> shortestPath = DijkstraAlgorithm.calculateShortestPathFromSource(fromNode, toNode);
+        DijkstraAlgorithm.calculateShortestPathFromSource(fromNode, toNode);
     }
 
 

@@ -19,11 +19,10 @@ import java.util.Set;
 public class DataLoaderByLinkServiceImpl implements DataLoaderService {
 
     private final Set<Country> countries;
-
     private final String dataSource;
     private final RestTemplate restTemplate;
 
-    public DataLoaderByLinkServiceImpl(@Value("${data.source}") String dataSource, RestTemplate restTemplate) {
+    public DataLoaderByLinkServiceImpl(@Value("${data.source}") String dataSource, final RestTemplate restTemplate) {
         this.dataSource = dataSource;
         this.restTemplate = restTemplate;
         countries = Collections.unmodifiableSet(this.loadData());

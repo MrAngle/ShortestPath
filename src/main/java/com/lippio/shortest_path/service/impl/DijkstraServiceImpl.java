@@ -22,7 +22,7 @@ public class DijkstraServiceImpl implements DijkstraService {
     private final CountryService countryService;
 
     @Override
-    public List<String> getShortestPath(Country origin, Country destination) {
+    public List<String> getShortestPath(final Country origin, final Country destination) {
         return getShortestPath(origin.getCountryCode(),
             destination.getCountryCode(),
             CountryIdentifier.CCA_3);
@@ -36,7 +36,9 @@ public class DijkstraServiceImpl implements DijkstraService {
     }
 
     @Override
-    public List<String> getShortestPath(String origin, String destination, CountryIdentifier countryIdentifier) {
+    public List<String> getShortestPath(final String origin,
+                                        final String destination,
+                                        final CountryIdentifier countryIdentifier) {
         final Set<CountryNode> countryNodes = countryService.getAllCountryNodes();
 
         final CountryNode originNode = countryService.getCountryNode(countryNodes,
@@ -47,8 +49,8 @@ public class DijkstraServiceImpl implements DijkstraService {
         return calculate(originNode, destinationNode);
     }
 
-    private static List<String> calculate(CountryNode origin, CountryNode destination) {
-        List<CountryNode> shortestPath = DijkstraAlgorithm.calculateShortestPathFromSource(origin, destination);
+    private static List<String> calculate(final CountryNode origin, final CountryNode destination) {
+        final List<CountryNode> shortestPath = DijkstraAlgorithm.calculateShortestPathFromSource(origin, destination);
         if (shortestPath == null || shortestPath.isEmpty()) {
             throw new RestException(Errors.PATH_NOT_FOUND);
         }

@@ -53,12 +53,6 @@ public final class CountryNode implements ICountryDijkstraNode {
         return country.calculateDistance(node);
     }
 
-    public String[] getShortestPathAsArray() {
-        this.shortestPath.sort((country1, country2) -> country1.getDistance() < country2.getDistance() ? 1 : 0);
-        return this.shortestPath.stream().map(x -> x.country.getCountryCode()).toArray(String[]::new);
-    }
-
-
     /**
      * Map Country set to Node set.
      *
