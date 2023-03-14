@@ -6,6 +6,7 @@ import com.lippio.shortest_path.enums.CountryIdentifier;
 import com.lippio.shortest_path.pojo.Country;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CountryRoutingMapperTest {
@@ -30,11 +31,12 @@ class CountryRoutingMapperTest {
             .build();
         CountryDetailsDTO countryIdentifier = mapper.toCountryDetailsDTO(country);
 
-        assertEquals(country.getName(), countryIdentifier.getName());
-        assertEquals(country.getCountryCode(), countryIdentifier.getCountryCode());
-        assertEquals(country.getIsoCode(), countryIdentifier.getIsoCode());
-        assertEquals(country.getRegion(), countryIdentifier.getRegion());
-        assertEquals(country.getCoordinates()[0], countryIdentifier.getCoordinates().get(0));
-        assertEquals(country.getCoordinates()[1], countryIdentifier.getCoordinates().get(1));
+        assertAll(
+            () -> assertEquals(country.getName(), countryIdentifier.getName()),
+            () -> assertEquals(country.getCountryCode(), countryIdentifier.getCountryCode()),
+            () -> assertEquals(country.getIsoCode(), countryIdentifier.getIsoCode()),
+            () -> assertEquals(country.getCoordinates()[0], countryIdentifier.getCoordinates().get(0)),
+            () -> assertEquals(country.getCoordinates()[1], countryIdentifier.getCoordinates().get(1)),
+            () -> assertEquals(country.getRegion(), countryIdentifier.getRegion()));
     }
 }

@@ -10,6 +10,7 @@ import com.lippio.shortest_path.pojo.RequestShortestPathData;
 import com.lippio.shortest_path.service.CountryService;
 import com.lippio.shortest_path.service.DijkstraService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.Set;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class DijkstraServiceImpl implements DijkstraService {
 
     private final CountryService countryService;
@@ -52,6 +54,7 @@ public class DijkstraServiceImpl implements DijkstraService {
     private static List<String> calculate(final CountryNode origin, final CountryNode destination) {
         final List<CountryNode> shortestPath = DijkstraAlgorithm.calculateShortestPathFromSource(origin, destination);
         if (shortestPath == null || shortestPath.isEmpty()) {
+            log.error("Failed to calculate path");
             throw new RestException(Errors.PATH_NOT_FOUND);
         }
         return shortestPath.stream().map(x -> x.getCountry().getCountryCode()).toList();

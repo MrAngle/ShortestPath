@@ -39,6 +39,7 @@ public class DataLoaderByLinkServiceImpl implements DataLoaderService {
         log.info("Load country data by link...");
         Country[] response = restTemplate.getForObject(dataSource, Country[].class);
         if (response == null || response.length == 0) {
+            log.error("Failed to load fetch country data");
             throw new RestException(Errors.FETCHING_COUNTRY_INTERNAL_ERROR);
         }
         HashSet<Country> loadedCountries = new HashSet<>(Arrays.asList(response));

@@ -75,7 +75,8 @@ paths:
           name: countryCode
           required: true
           schema:
-            $ref: '#/components/schemas/CountryCode'
+            type: string
+            maxLength: 128
         - in: query
           name: countryIdentifierType
           required: false
