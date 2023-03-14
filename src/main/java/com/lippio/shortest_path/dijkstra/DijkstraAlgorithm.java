@@ -3,9 +3,10 @@ package com.lippio.shortest_path.dijkstra;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
-public class DijkstraAlgorithm {
+public final class DijkstraAlgorithm {
 
     private DijkstraAlgorithm() {}
 
@@ -19,7 +20,11 @@ public class DijkstraAlgorithm {
 
         unsettledNodes.add(from);
         while (!unsettledNodes.isEmpty()) {
-            CountryNode currentNode = getLowestDistanceNode(unsettledNodes);
+            Optional<CountryNode> optCurrentNode = getLowestDistanceNode(unsettledNodes);
+            if(optCurrentNode.isEmpty()) {
+                throw new IllegalArgumentException("Unexpected empty node");
+            }
+            CountryNode currentNode = optCurrentNode.get();
             unsettledNodes.remove(currentNode);
 
             // Skip node calculation if shortest Distance (if reached destination) is smaller than current node distance
@@ -39,7 +44,7 @@ public class DijkstraAlgorithm {
         return to.getShortestPath();
     }
 
-    private static CountryNode getLowestDistanceNode(Set<CountryNode> unsettledNodes) {
+    private static Optional<CountryNode> getLowestDistanceNode(final Set<CountryNode> unsettledNodes) {
         CountryNode lowestDistanceNode = null;
         float lowestDistance = Float.MAX_VALUE;
         for (CountryNode node : unsettledNodes) {
@@ -49,11 +54,14 @@ public class DijkstraAlgorithm {
                 lowestDistanceNode = node;
             }
         }
-        return lowestDistanceNode;
+        if(lowestDistanceNode == null) {
+            return Optional.empty();
+        }
+        return Optional.of(lowestDistanceNode);
     }
 
-    private static void calculateMinimumDistance(CountryNode evaluationNode,
-                                                 float edgeWeigh, CountryNode sourceNode) {
+    private static void calculateMinimumDistance(final CountryNode evaluationNode,
+                                                 float edgeWeigh, final CountryNode sourceNode) {
         float sourceDistance = sourceNode.getDistance();
         if (sourceDistance + edgeWeigh < evaluationNode.getDistance()) {
             evaluationNode.setDistance(sourceDistance + edgeWeigh);
