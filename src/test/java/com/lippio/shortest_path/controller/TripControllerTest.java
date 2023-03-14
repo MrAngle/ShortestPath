@@ -6,7 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lippio.shortest_path.DataUtils;
 import com.lippio.shortest_path.ShortestPathApplication;
+import com.lippio.shortest_path.errors.Errors;
+import com.lippio.shortest_path.errors.RestException;
 import com.lippio.shortest_path.service.TripRequestService;
+import com.lippio.shortest_path.validators.TripRequestValidatorService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +27,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -42,6 +47,9 @@ class TripControllerTest {
 
     @MockBean
     private TripRequestService tripRequestService;
+
+    @MockBean
+    private TripRequestValidatorService tripRequestValidatorService;
 
     @Test
     void shouldReturnAllTrips() throws Exception {
@@ -91,5 +99,26 @@ class TripControllerTest {
             .andReturn();
 
         verify(tripRequestService, times(1)).saveTrip(requestTripDTO);
+    }
+    @Test
+    void shouldThrowWrongFormatExceptionTrip() throws Exception {
+        // given
+        RequestTripDTO requestTripDTO = DataUtils.mockRequestTripDTO(Map.of("countries", "\"NAMA\",\"VNM\""));
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        final String requestBody = objectMapper.writeValueAsString(requestTripDTO);
+
+        Mockito.doThrow(new RestException(Errors.INCORRECT_COUNTRY_LIST_FORMAT))
+            .when(tripRequestValidatorService).validate(Mockito.any());
+
+        // when
+        MvcResult result = mockMvc.perform(post("/trip")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
+            .andExpect(status().isBadRequest())
+            .andReturn();
+
+        verify(tripRequestService, times(0)).saveTrip(any());
+        assertThat(result.getResolvedException().getMessage()).isEqualTo(Errors.INCORRECT_COUNTRY_LIST_FORMAT.getMessage());
     }
 }

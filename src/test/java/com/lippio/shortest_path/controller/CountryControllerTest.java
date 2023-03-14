@@ -10,6 +10,7 @@ import com.lippio.shortest_path.errors.RestException;
 import com.lippio.shortest_path.pojo.Country;
 import com.lippio.shortest_path.service.CountryService;
 import com.lippio.shortest_path.service.ShortestPathService;
+import com.lippio.shortest_path.validators.TripRequestValidatorService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,9 @@ class CountryControllerTest {
 
     @MockBean
     private CountryService countryService;
+
+    @MockBean
+    private TripRequestValidatorService tripRequestValidatorService;
 
     @Test
     void shouldReturnCountryDetails() throws Exception {

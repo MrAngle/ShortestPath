@@ -37,7 +37,7 @@ public class CountryController implements CountryApi {
                                                        final String origin,
                                                        final String destination,
                                                        final CountryIdentifierTypeDTO countryIdentifierType) {
-        List<String> shortestPath = shortestPathService.getShortestPath(
+        final List<String> shortestPath = shortestPathService.getShortestPath(
             origin,
             destination,
             countryIdentifierType);

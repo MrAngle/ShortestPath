@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 
 /**
  * The interface Country service.
+ * // It may be separate service (CountryNodeService)
  */
 public interface CountryService {
 
