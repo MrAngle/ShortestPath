@@ -3,7 +3,7 @@
 //import com.lippio.shortest_path.dijkstra.CountryNode;
 //import com.lippio.shortest_path.errors.RestException;
 //import com.lippio.shortest_path.service.DijkstraService;
-//import com.lippio.shortest_path.service.DijkstraServiceImpl;
+//import com.lippio.shortest_path.service.impl.DijkstraServiceImpl;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.context.SpringBootTest;

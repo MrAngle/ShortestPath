@@ -1,6 +1,7 @@
 package com.lippio.shortest_path.service;
 
 import com.lippio.shortest_path.enums.CountryIdentifier;
+import com.lippio.shortest_path.errors.Errors;
 import com.lippio.shortest_path.errors.RestException;
 import com.lippio.shortest_path.pojo.RequestShortestPathData;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,7 +69,7 @@ class DijkstraServiceTest {
             dijkstraService.getShortestPath("USA", "ETH", CountryIdentifier.CCA_3);
             fail();
         } catch (RestException exception) {
-            assertEquals("Path not found", exception.getMessage());
+            assertEquals(Errors.PATH_NOT_FOUND.getMessage(), exception.getMessage());
             assertEquals(400, exception.getErrors().getStatus().value());
         }
     }
@@ -79,7 +80,7 @@ class DijkstraServiceTest {
             dijkstraService.getShortestPath("ETH", "USA", CountryIdentifier.CCA_3);
             fail();
         } catch (RestException exception) {
-            assertEquals("Path not found", exception.getMessage());
+            assertEquals(Errors.PATH_NOT_FOUND.getMessage(), exception.getMessage());
             assertEquals(400, exception.getErrors().getStatus().value());
         }
     }

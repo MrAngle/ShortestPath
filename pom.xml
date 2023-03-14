@@ -12,6 +12,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
+        <jackson.version>2.13.4</jackson.version>
         <lombok.version>1.18.24</lombok.version>
         <springdoc-openapi-ui.version>1.6.12</springdoc-openapi-ui.version>
     </properties>
@@ -22,6 +23,7 @@
         <version>2.7.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
 
     <dependencies>
         <dependency>
@@ -43,12 +45,7 @@
             <artifactId>spring-web</artifactId>
             <version>5.3.21</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <version>2.7.0</version>
-            <scope>test</scope>
-        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -59,24 +56,18 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.8.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.13.4</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.13.4</version>
+            <version>${jackson.version}</version>
         </dependency>
 
         <!--Benchmark lib-->
@@ -111,9 +102,21 @@
             <artifactId>jackson-databind-nullable</artifactId>
             <version>0.2.6</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>2.7.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-
-
 
     <build>
         <plugins>
@@ -170,6 +173,12 @@
                                     @lombok.NoArgsConstructor
                                 </additionalModelTypeAnnotations>
                             </configOptions>
+                            <typeMappings>
+                                <typeMapping>LocalDate=LocalDateTime</typeMapping>
+                            </typeMappings>
+                            <importMappings>
+                                <importMapping>java.time.LocalDate=java.time.LocalDateTime</importMapping>
+                            </importMappings>
                             <schemaMappings>HttpHeaders=org.springframework.http.HttpHeaders</schemaMappings>
                         </configuration>
                     </execution>

@@ -1,4 +1,4 @@
-package com.lippio.shortest_path.service;
+package com.lippio.shortest_path.service.impl;
 
 import com.lippio.shortest_path.dijkstra.CountryNode;
 import com.lippio.shortest_path.dijkstra.DijkstraAlgorithm;
@@ -7,6 +7,8 @@ import com.lippio.shortest_path.errors.Errors;
 import com.lippio.shortest_path.errors.RestException;
 import com.lippio.shortest_path.pojo.Country;
 import com.lippio.shortest_path.pojo.RequestShortestPathData;
+import com.lippio.shortest_path.service.CountryService;
+import com.lippio.shortest_path.service.DijkstraService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

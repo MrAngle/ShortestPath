@@ -1,7 +1,8 @@
-package com.lippio.shortest_path.service;
+package com.lippio.shortest_path.service.impl;
 
 import com.lippio.shortest_path.entity.TripEntity;
 import com.lippio.shortest_path.repository.TripRepository;
+import com.lippio.shortest_path.service.TripService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

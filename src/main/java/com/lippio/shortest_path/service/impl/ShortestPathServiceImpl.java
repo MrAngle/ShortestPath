@@ -1,9 +1,11 @@
-package com.lippio.shortest_path.service;
+package com.lippio.shortest_path.service.impl;
 
 import com.example.api.generated.model.CountryIdentifierTypeDTO;
 import com.lippio.shortest_path.enums.CountryIdentifier;
 import com.lippio.shortest_path.mapper.controllers_dto.CountryRoutingMapper;
 import com.lippio.shortest_path.pojo.RequestShortestPathData;
+import com.lippio.shortest_path.service.DijkstraService;
+import com.lippio.shortest_path.service.ShortestPathService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -19,7 +19,7 @@ import java.util.Set;
 @Setter
 public final class CountryNode implements ICountryDijkstraNode {
 
-    private Country country;
+    private final Country country;
     @Setter(AccessLevel.NONE)
     private float distance = Float.MAX_VALUE;
     private List<CountryNode> shortestPath = new LinkedList<>();

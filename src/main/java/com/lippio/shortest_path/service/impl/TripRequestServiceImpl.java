@@ -1,9 +1,11 @@
-package com.lippio.shortest_path.service;
+package com.lippio.shortest_path.service.impl;
 
 import com.example.api.generated.model.RequestTripDTO;
 import com.example.api.generated.model.ResponseTripDTO;
 import com.lippio.shortest_path.entity.TripEntity;
 import com.lippio.shortest_path.mapper.controllers_dto.TripMapper;
+import com.lippio.shortest_path.service.TripRequestService;
+import com.lippio.shortest_path.service.TripService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +20,7 @@ public class TripRequestServiceImpl implements TripRequestService {
 
     @Override
     public void saveTrip(final RequestTripDTO tripDTO) {
-        final TripEntity tripEntity = TripMapper.INSTANCE.toTripEntity(tripDTO);
-        tripEntity.setCreatedAt(LocalDateTime.now());
+        final TripEntity tripEntity = TripMapper.INSTANCE.toTripEntity(tripDTO, LocalDateTime.now());
         tripService.saveTrip(tripEntity);
     }
 

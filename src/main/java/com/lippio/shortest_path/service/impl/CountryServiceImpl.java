@@ -1,10 +1,12 @@
-package com.lippio.shortest_path.service;
+package com.lippio.shortest_path.service.impl;
 
 import com.lippio.shortest_path.dijkstra.CountryNode;
 import com.lippio.shortest_path.enums.CountryIdentifier;
 import com.lippio.shortest_path.errors.Errors;
 import com.lippio.shortest_path.errors.RestException;
 import com.lippio.shortest_path.pojo.Country;
+import com.lippio.shortest_path.service.CountryService;
+import com.lippio.shortest_path.service.DataLoaderService;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -14,7 +16,7 @@ import java.util.function.Predicate;
 public class CountryServiceImpl implements CountryService {
     private final DataLoaderService dataLoaderService;
 
-    CountryServiceImpl(final DataLoaderService dataLoaderService) {
+    public CountryServiceImpl(final DataLoaderService dataLoaderService) {
         this.dataLoaderService = dataLoaderService;
     }
 
@@ -22,6 +24,7 @@ public class CountryServiceImpl implements CountryService {
     public Set<Country> getCountries() {
         return dataLoaderService.getCountries();
     }
+
     @Override
     public Country getCountry(String countryCode, CountryIdentifier countryIdentifier) {
         return findCountry(countryIdentifier.getCountryFilterPredicate(countryCode));

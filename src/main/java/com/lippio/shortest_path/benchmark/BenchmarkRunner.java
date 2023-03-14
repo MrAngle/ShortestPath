@@ -3,7 +3,7 @@ package com.lippio.shortest_path.benchmark;
 import com.lippio.shortest_path.dijkstra.CountryNode;
 import com.lippio.shortest_path.dijkstra.DijkstraAlgorithm;
 import com.lippio.shortest_path.pojo.Country;
-import com.lippio.shortest_path.service.DataLoaderByFileServiceImpl;
+import com.lippio.shortest_path.service.impl.DataLoaderByFileServiceImpl;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Measurement;
