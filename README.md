@@ -23,9 +23,11 @@ Description:
 Application based on Dijkstra algorithm to find the shortest path from one country to another. For This example:
 - Dijkstra node/vortex - defined as country
 
-- Dijkstra node distance - by calculate vector of countries co-ordinates ("latlng" param) - Between source country and his border countries.
+- Dijkstra node distance - by calculate distance of countries co-ordinates ("latlng" param) - Between source country 
+  and his border countries.
   Of course, it is not very precise, but it helps to estimate the cost of the road
 
 
 Known bugs:
-- Example: from: Poland, to: Mongolia application will find the shortest path as: ["POL", "RUS", "MNG"] - it's not true. It's because provided data don't include information about "separated" countries.
+- Example: from: Poland, to: Mongolia application will find the shortest path as: ["POL", "RUS", "MNG"] - it's not 
+  true. It's because there is no information available regarding countries that have scattered geographical locations - they may have different neighboring countries depending on the case. For example Russia.
